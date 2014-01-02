@@ -1,0 +1,11 @@
+# TEAM
+Your title: Sam Ageloff
+Site: samageloff.com
+Twitter: samageloff
+Location: Brooklyn, NY.
+
+# SITE
+Last update: YYYY/MM/DD
+Standards: Yes
+Components: Jade
+Software: Harp
