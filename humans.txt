@@ -7,5 +7,5 @@ Location: Brooklyn, NY.
 # SITE
 Last update: YYYY/MM/DD
 Standards: Yes
-Components: Jade
+Components: Jade, Meteocon, SASS, Fontastic, Github
 Software: Harp
