@@ -122,13 +122,13 @@ function stackBlurCanvasRGBA( id, top_x, top_y, width, height, radius )
       netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
       imageData = context.getImageData( top_x, top_y, width, height );
     } catch(e) {
-      alert("Cannot access local image");
+      console.log("Cannot access local image");
       throw new Error("unable to access local image data: " + e);
       return;
     }
     }
   } catch(e) {
-    alert("Cannot access image");
+    console.log("Cannot access image");
     throw new Error("unable to access image data: " + e);
   }
 
@@ -377,27 +377,7 @@ function stackBlurCanvasRGB( id, top_x, top_y, width, height, radius )
   var context = canvas.getContext("2d");
   var imageData;
 
-  try {
-    try {
-    imageData = context.getImageData( top_x, top_y, width, height );
-    } catch(e) {
-
-    // NOTE: this part is supposedly only needed if you want to work with local files
-    // so it might be okay to remove the whole try/catch block and just use
-    // imageData = context.getImageData( top_x, top_y, width, height );
-    try {
-      netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-      imageData = context.getImageData( top_x, top_y, width, height );
-    } catch(e) {
-      alert("Cannot access local image");
-      throw new Error("unable to access local image data: " + e);
-      return;
-    }
-    }
-  } catch(e) {
-    alert("Cannot access image");
-    throw new Error("unable to access image data: " + e);
-  }
+  imageData = context.getImageData( top_x, top_y, width, height );
 
   var pixels = imageData.data;
 

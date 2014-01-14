@@ -1,3 +1,3 @@
 (function() {
-    stackBlurImage('bg', 'canvas', '50', '50');
+    stackBlurImage('bg', 'canvas', '60', '50');
 })();
