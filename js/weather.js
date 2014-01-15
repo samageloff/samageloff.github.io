@@ -8,9 +8,16 @@
     city: 'Brooklyn',
     limit: 1,
     state: 'NY',
-    type: 'forecast',
+    type: 'forecast10day',
+
+    MESSAGE: {
+      error: 'That place doesn\'t exist'
+    },
 
     DOM: {
+      locale_wrapper: '.locale',
+      ready_class: 'ready',
+      widget_body: '.weather',
       widget_list: '.weather span'
     },
 
@@ -31,21 +38,20 @@
     renderForecast = function(res) {
       // Error Messaging
       if (!res.forecast) {
-        console.log('err');
         return;
       }
       else {
         // Configure DOM
         var response = res.forecast.simpleforecast.forecastday,
+            widget = document.querySelector(CONFIG.DOM.widget_body),
             widgetList = document.querySelector(CONFIG.DOM.widget_list),
             // Assign Response to 'data' Object
             data = {
               days: response.slice(0, CONFIG.limit)
-            },
-            ref = data.days[0];
+            };
 
         // Mustache Template
-        output = Mustache.render("<em class='icon-{{icon}}'></em><span>{{high.fahrenheit}}&deg / {{low.fahrenheit}}&deg</span>", ref);
+        output = Mustache.render("{{title}} spends {{calc}}", data);
         widgetList.innerHTML = output;
       }
     };
