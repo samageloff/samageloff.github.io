@@ -1,3 +1,4 @@
+// weather widget
 (function() {
 
   // Wunderground API Globals
@@ -56,5 +57,18 @@
   }
 
   init();
+
+})();
+
+// randomly generates background image
+(function() {
+
+  var canvas = document.querySelector('.backdrop');
+
+  function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  canvas.style.backgroundImage = 'url(img/' + getRandomInt(1, 5) + '.jpg)';
 
 })();
