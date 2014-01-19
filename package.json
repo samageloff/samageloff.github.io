@@ -2,6 +2,7 @@
   "name": "sam-ageloff-website",
   "version": "0.1.0",
   "devDependencies": {
-    "grunt-contrib-uglify": "~0.2.2"
+    "grunt-contrib-uglify": "~0.3.0",
+    "grunt": "~0.4.2"
   }
 }
