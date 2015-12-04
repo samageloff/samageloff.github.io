@@ -1,0 +1,23 @@
+// bower:scss
+// endbower
+
+html {
+  height: 100%;
+}
+
+body {
+  background: -webkit-linear-gradient(top, #364f4f, #4e8986);
+  background: linear-gradient(to bottom, #364f4f, #4e8986);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+}
+
+.card {
+  border: 1px solid red;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
