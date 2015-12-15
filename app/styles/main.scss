@@ -12,7 +12,9 @@ html, body {
 }
 
 body {
-  background: linear-gradient(to bottom, $goldfish-blue, $goldfish-orange);
+  background: url('../images/desert.jpg') no-repeat;
+  background-position: center;
+  background-size: cover;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -21,6 +23,18 @@ main {
   display: flex;
   height: 100%;
   justify-content: center;
+  z-index: 2;
+}
+
+.gradient-layer {
+  background: linear-gradient(to bottom, $terra-midnight, $terra-forest);
+  bottom: 0;
+  left: 0;
+  opacity: .65;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 .content-block {

@@ -1,0 +1,65 @@
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+}
+
+.nav {
+  background-color: yellow;
+  flex-grow: 1;
+}
+
+.subnav {
+  background-color: #000;
+  flex-grow: 1;
+}
+
+.content {
+  align-items: center;
+  background-color: lightgrey;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: space-around;
+
+  .item {
+    align-items: center;
+    background-color: orange;
+    box-sizing: border-box;
+    display: flex;
+    height: 50%;
+    justify-content: center;
+    padding: 1em;
+    transition: width .5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    width: 20%;
+
+    &.active {
+      background-color: green;
+      width: 100%;
+    }
+  }
+
+  .wrap {
+    overflow: hidden;
+    width: 615px;
+  }
+
+  .hue {
+    animation: hue 10s infinite;
+    opacity: .8;
+  }
+
+  @-webkit-keyframes hue {
+    0%, 100%  {
+      -webkit-filter: hue-rotate(0deg) blur(40px);
+    }
+    50% { -webkit-filter: hue-rotate(160deg) blur(40px);
+    }
+  }
+
+
+}
