@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-  background: url('../images/desert-3.png') no-repeat, linear-gradient(to bottom, $goldfish-blue 20%, $goldfish-orange);
+  background: url('../images/space.jpg') no-repeat;
   background-position: center;
   background-size: cover;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -27,10 +27,12 @@ main {
 }
 
 .gradient-layer {
-  background: linear-gradient(to bottom, $terra-forest, $terra-midnight);
+  background: url('../images/desert-3.png') no-repeat, linear-gradient(to bottom, $goldfish-blue 20%, $goldfish-orange);
+  background-position: right;
+  background-size: cover;
   bottom: 0;
   left: 0;
-  opacity: .55;
+  opacity: .95;
   position: absolute;
   top: 0;
   width: 100%;
