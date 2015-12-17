@@ -12,7 +12,7 @@ html, body {
 }
 
 body {
-  background: url('../images/desert.jpg') no-repeat;
+  background: url('../images/desert-3.png') no-repeat, linear-gradient(to bottom, $goldfish-blue 20%, $goldfish-orange);
   background-position: center;
   background-size: cover;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -27,10 +27,10 @@ main {
 }
 
 .gradient-layer {
-  background: linear-gradient(to bottom, $terra-midnight, $terra-forest);
+  background: linear-gradient(to bottom, $terra-forest, $terra-midnight);
   bottom: 0;
   left: 0;
-  opacity: .65;
+  opacity: .55;
   position: absolute;
   top: 0;
   width: 100%;
@@ -48,6 +48,35 @@ main {
   overflow: hidden;
   position: relative;
   width: 615px;
+}
+
+.arrow-box {
+	position: relative;
+	background: transparent;
+	border: 4px solid #ffffff;
+}
+.arrow-box:after, .arrow-box:before {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow-box:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-bottom-color: red;
+	border-width: 250px;
+	margin-left: -250px;
+}
+.arrow-box:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 256px;
+	margin-left: -256px;
 }
 
 .hue-rotator {
