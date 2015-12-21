@@ -16,6 +16,20 @@ body {
   background-position: right;
   background-size: cover;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  opacity: 0;
+  transition: opacity 2.5s cubic-bezier(0.86, 0, 0.07, 1);
+
+  &.ready {
+    opacity: 1;
+  }
+}
+.debugger {
+  background-color: rgba(228, 228, 228, .9);
+  position: fixed;
+  padding: 1em;
+  top: 1em;
+  right: 1em;
+  z-index: 3;
 }
 
 main {
@@ -27,12 +41,11 @@ main {
 }
 
 .desert-layer {
-  background: url('../images/desert-3.png') no-repeat;
-  background-position: right;
+  background: url('../images/desert-4.png') no-repeat;
+  background-position: 0 0;
   background-size: cover;
   bottom: 0;
   left: 0;
-  opacity: .95;
   position: absolute;
   top: 0;
   width: 100%;
@@ -40,10 +53,8 @@ main {
 }
 
 .gradient-layer {
-  background: linear-gradient(to bottom, $goldfish-blue, $goldfish-orange);
-  background-position: right;
-  background-size: cover;
-  bottom: 0;
+  background: linear-gradient(to bottom, $goldfish-redorange, $terra-midnight, $goldfish-blue);
+  bottom: 30%;
   left: 0;
   opacity: .85;
   position: absolute;
@@ -54,29 +65,37 @@ main {
 
 .content-block {
   background-color: rgba(228, 228, 228, .9);
-  padding: 1em 1.5em;
-  margin: 1em;
+  padding: 1.5em;
   z-index: 3;
 }
 
-.photo-block {
-  height: 615px;
-  overflow: hidden;
-  position: relative;
-  width: 615px;
-}
-.hue-rotator {
-  -webkit-animation: hue 10s infinite;
-  opacity: .8;
+.triangle-hole {
+  bottom: 5em;
+  left: calc(50% - 185px);
+  position: absolute;
+  transform: scale(0);
+  transition: all .35s cubic-bezier(0.86, 0, 0.07, 1);
+  transform-origin: bottom;
+  z-index: 3;
+
+  &.in {
+    transform: scale(1);
+  }
 }
 
-@-webkit-keyframes hue {
-  0%, 100%  {
-    -webkit-filter: hue-rotate(0deg) blur(40px);
-  }
-  50% { -webkit-filter: hue-rotate(160deg) blur(40px);
+@include mobile {
+  .triangle-hole {
+    bottom: 1em;
+    left: 5%;
+    position: absolute;
+    transform: scale(0);
+    transition: all .35s cubic-bezier(0.86, 0, 0.07, 1);
+    transform-origin: bottom;
+    z-index: 3;
+    width: 90%;
   }
 }
+
 
 .shadow-depth-1 { @include card(1); }
 .shadow-depth-2 { @include card(2); }

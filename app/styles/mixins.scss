@@ -34,3 +34,25 @@
 
   @return 0 $primary-offset $blur $color;
 }
+
+$mobile-width: 414px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media (max-width: #{$mobile-width}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
