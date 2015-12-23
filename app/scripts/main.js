@@ -1,10 +1,6 @@
 console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
 
-(function(window,document) {
-
   var body = document.querySelector('body');
-
-  window.addEventListener('mousewheel', addWheelListener, false);
 
   function doSomeBasicAnimations() {
     var triangleHole = document.querySelector('.triangle-hole');
@@ -43,10 +39,19 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
   	};
   }
 
-  var currentPos = 0;
+  function Pivotr(elem, config) {
+    this.elem = elem;
+    this.config = config;
+    this.currentPos = 0;
+    this.vert = e.deltaY;
 
-  function addWheelListener(e) {
-    var vert = e.deltaY;
+    console.log('Pivotr enabled.');
+  }
+
+  Pivotr.prototype.init = function() {
+
+    window.addEventListener('mousewheel', mousewheel, false);
+
     var debugConsole = document.querySelector('.debugger');
 
     debugConsole.innerHTML = [
@@ -68,17 +73,12 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
 
     updateDeltas();
     e.preventDefault();
-  }
 
-  var updateDeltas = debounce(function() {
-    console.log('saving position', currentPos);
-  }, 250);
-
-  var init = function() {
     doSomeBasicAnimations();
     debug();
-  };
 
-  init();
+    var updateDeltas = debounce(function() {
+      console.log('saving position', currentPos);
+    }, 250);
 
-})(window,document);
+};

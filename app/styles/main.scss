@@ -71,6 +71,7 @@ main {
 
 .triangle-hole {
   bottom: 5em;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
   left: calc(50% - 185px);
   position: absolute;
   transform: scale(0);
