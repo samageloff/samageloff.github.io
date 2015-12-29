@@ -33,15 +33,35 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
   	};
   }
 
+
+  /*
+    Usage:
+      data-pivotr='{"threshold": "low", "action": "addClass", "direction": "any"}'
+
+      options:
+        // how fast you have to scroll to trigger stuff
+        threshold: low, med, high (default: low)
+
+        // method you want to trigger on the element
+        action: addClass, removeClass, toggleClass (default: addClass)
+
+        // which scroll/direction will trigger the event
+        direction: any, left, right, up, down (default: any)
+   */
   function Pivotr(opt_config) {
 
     this.arrays = [];
+
     this.triggers = [
       {"vert_plus_1000": {'elem':'<div class="content-block shadow-depth-3" data-pivotr="[{"addClass":"show", "direction": "vert", "timer" : 1000}, {"removeClass": "show", "direction": "vert", "timer":-1000}]"><img src="https://scontent-ord1-1.xx.fbcdn.net/hphotos-xlp1/t31.0-8/10269131_10151993536642187_4397032661863746536_o.jpg" width="200"></div>', addClass: "show"}},
       {"vert_minus_1000": {'elem': '<img src="images/triangle-hole.png" alt="" class="triangle-hole" data-pivotr="{&quot;addClass&quot;: &quot;show&quot;, &quot;direction&quot;: &quot;vert&quot;, &quot;timer&quot;: 2000}">', removeClass: "show"}}
     ];
 
     this.map = new Map();
+
+    // For PubSub
+    this.topics = {};
+    this.subUid = -1;
 
     // Store accumulative X and Y values
     this.currentPositionX = 0;
@@ -60,10 +80,6 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
   Pivotr.prototype.init_ = function() {
     this.mapTriggers_();
     this.listen_();
-
-    if (this.config.debug) {
-      this.initDebugger_();
-    }
   };
 
   Pivotr.prototype.mapTriggers_ = function() {
@@ -139,14 +155,47 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
         'saving position Y', this.currentPositionY);
   }, 500);
 
-  Pivotr.prototype.initDebugger_ = function() {
-    this.debugConsole = document.createElement('div');
-    this.debugConsole.setAttribute('class', 'debugger');
-    body.appendChild(this.debugConsole);
+  Pivotr.prototype.subscribe = function(topic, func) {
+    if (!this.topics[topic]) {
+      this.topics[topic] = [];
+    }
+    var token = (++this.subUid).toString();
+    this.topics[topic].push({
+      token: token,
+      func: func
+    });
+    return token;
   };
 
-  // doSomeBasicAnimations();
-  //
+  Pivotr.prototype.publish = function(topic, args) {
+    if (!this.topics[topic]) {
+      return false;
+    }
+    setTimeout(function() {
+      var subscribers = this.topics[topic],
+          len = subscribers ? subscribers.length : 0;
 
+      while (len--) {
+        subscribers[len].func(topic, args);
+      }
+    }, 0);
+    return true;
+  };
 
-var site = new Pivotr({debug:true});
+  Pivotr.prototype.unsubscribe = function(token) {
+    for (var m in this.topics) {
+      if (this.topics[m]) {
+        for (var i = 0, j = this.topics[m].length; i < j; i++) {
+          if (this.topics[m][i].token === token) {
+            this.topics[m].splice(i, 1);
+            return token;
+          }
+        }
+      }
+    }
+    return false;
+  };
+
+  doSomeBasicAnimations();
+
+var site = new Pivotr();
