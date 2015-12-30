@@ -51,12 +51,7 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
   function Pivotr(opt_config) {
 
     this.arrays = [];
-
-    this.elems = [
-      {"threshold": "low", "action": "addClass", "className": "show", "direction": "any"},
-      {"threshold": "med", "action": "removeClass", "className": "show", "direction": "up"}
-    ];
-
+    this.elems = [];
     this.map = new Map();
 
     // For PubSub
@@ -75,54 +70,34 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
 
   Pivotr.prototype.view = window;
 
-
   Pivotr.prototype.init_ = function() {
     this.mapElems_();
     this.listen_();
   };
-
 
   Pivotr.prototype.mapElems_ = function() {
     var attrs = document.querySelectorAll('[data-pivotr]');
     var elems = Array.prototype.slice.call(attrs);
 
     elems.forEach(function(elem, index, array) {
-      var attrs_ = JSON.parse(elem.dataset.pivotr);
-      var attr;
-      var len = attrs_.length;
-      var i = 0;
 
-      // if there are multiple attributes on a node
-      // we need to create a reference to each of them,
-      // and to their parent node
-      if (len) {
-        for (i; i < len; i++) {
-          attr = createPivotrObj_(attrs_[i], elem);
-        }
-      } else {
-        attr = createPivotrObj_(attrs_, elem);
+      if (!elem.getAttribute('id')) {
+        var id = this.createUniqueId();
+        elem.setAttribute('id', id);
       }
 
-      this.arrays.push(attr);
+      // Then, get the attribute data
+      var attrs_ = JSON.parse(elem.dataset.pivotr);
+      this.map.set(elem.id, attrs_);
+
+      this.subscribe(attrs_.threshold, this.decorateElem_);
+
     }, this);
-
-    function createPivotrObj_(obj, elem) {
-      var temp = {};
-      var objKey = obj.direction + "_" + obj.timer;
-      temp[objKey] = obj;
-      var pivotrObj = temp;
-      return pivotrObj;
-    }
-
-    // this.processMap_();
   };
 
-  Pivotr.prototype.processMap_ = function() {
-    var temp = [];
-    this.triggers = temp.concat.apply([], this.arrays);
-    console.log(this.triggers);
+  Pivotr.prototype.decorateElem_ = function(data) {
+    console.log('decorate elem', data);
   };
-
 
   Pivotr.prototype.listen_ = function() {
     this.view.addEventListener('wheel', function(e) {
@@ -130,21 +105,23 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
     }.bind(this), false);
   };
 
-
   Pivotr.prototype.handleEvents_ = function(e) {
     var vert = e.deltaY;
     var horz = e.deltaX;
 
-    console.log(horz, vert);
+    // threshold: low (> 20 < 100), med (> 120 < 200), high (> 200) (default: low)
 
+    if (vert > 20 && vert < 100) {
+      this.publish('threshold', 'low');
+    }
+
+    // console.log(horz, vert, this.map);
     this.updateDeltas_();
   };
-
 
   Pivotr.prototype.updateDeltas_ = debounce(function() {
     console.log('stopped scrolling for now');
   }, 500);
-
 
   Pivotr.prototype.subscribe = function(topic, func) {
     if (!this.topics[topic]) {
@@ -157,7 +134,6 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
     });
     return token;
   };
-
 
   Pivotr.prototype.publish = function(topic, args) {
     if (!this.topics[topic]) {
@@ -174,7 +150,6 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
     return true;
   };
 
-
   Pivotr.prototype.unsubscribe = function(token) {
     for (var m in this.topics) {
       if (this.topics[m]) {
@@ -189,6 +164,9 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
     return false;
   };
 
+  Pivotr.prototype.createUniqueId = function() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+  };
 
   doSomeBasicAnimations();
 
