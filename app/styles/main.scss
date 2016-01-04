@@ -41,11 +41,12 @@ main {
 }
 
 .desert-layer {
-  background: url('../images/desert-4.png') no-repeat;
+  background: url('../images/desert-5.png') no-repeat;
   background-position: 0 0;
   background-size: cover;
   bottom: 0;
   left: 0;
+  opacity: .85;
   position: absolute;
   top: 0;
   width: 100%;
@@ -53,8 +54,8 @@ main {
 }
 
 .gradient-layer {
-  background: linear-gradient(to bottom, $goldfish-redorange, $terra-midnight, $goldfish-blue);
-  bottom: 30%;
+  background: linear-gradient(to bottom, #000 40%, $fin-red, $fin-orange, $fin-green);
+  bottom: 0;
   left: 0;
   opacity: .85;
   position: absolute;
@@ -67,6 +68,55 @@ main {
   background-color: rgba(228, 228, 228, .9);
   padding: 1.5em;
   z-index: 3;
+}
+
+.brand {
+  color: white;
+  left: 35%;
+  font-size: 3em;
+  font-family: 'helvetica neue';
+  font-weight: lighter;
+  position: absolute;
+  text-align: center;
+  top: 46%;
+}
+
+.svg-container {
+  position: relative;
+  z-index: 3;
+
+  svg {
+    height: 332px;
+    width: 414px;
+
+    &.flipped {
+      opacity: .3;
+      position: absolute;
+      top: -15em;
+      transform: scale(.25) rotate(180deg);
+      width: 374px;
+
+      polygon {
+        stroke-width: 17;
+      }
+    }
+  }
+
+  polygon {
+    fill: transparent;
+    stroke: white;
+    stroke-width: 4;
+  }
+
+}
+
+
+.test-triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 100px 100px 0 100px;
+  border-color: #007bff transparent transparent transparent;
 }
 
 .triangle-hole {

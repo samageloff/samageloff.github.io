@@ -50,15 +50,9 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
    */
   function Pivotr(opt_config) {
 
-    this.arrays = [];
     this.elems = [];
     this.map = new Map();
-
-    // For PubSub
-    this.topics = {};
-    this.subUid = -1;
-
-    this.thresholds = ['low', 'med', 'high'];
+    this.emit = this.pubsub_();
 
     if (opt_config) {
       this.config = opt_config;
@@ -90,13 +84,8 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
       var attrs_ = JSON.parse(elem.dataset.pivotr);
       this.map.set(elem.id, attrs_);
 
-      this.subscribe(attrs_.threshold, this.decorateElem_);
-
+      this.emit.subscribe(attrs_.threshold, this.decorateElem_.bind(this));
     }, this);
-  };
-
-  Pivotr.prototype.decorateElem_ = function(data) {
-    console.log('decorate elem', data);
   };
 
   Pivotr.prototype.listen_ = function() {
@@ -106,66 +95,61 @@ console.log('\'Allo \'Allo!'); // eslint-disable-line no-console
   };
 
   Pivotr.prototype.handleEvents_ = function(e) {
-    var vert = e.deltaY;
-    var horz = e.deltaX;
+    // +Y up, -Y down, -X right, +X left
 
-    // threshold: low (> 20 < 100), med (> 120 < 200), high (> 200) (default: low)
+    var vert = (e.deltaY >= 1 && e.deltaY !== -1 || e.deltaY === 0 ) ? 'up' : 'down';
+    var horz = (e.deltaX <= 0) ? 'right' : 'left';
 
-    if (vert > 20 && vert < 100) {
-      this.publish('threshold', 'low');
-    }
+    console.log(e.deltaY, e.deltaX);
 
-    // console.log(horz, vert, this.map);
+    this.direction = vert + ' ' + horz;
+    this.emit.publish(this.direction, 'direction');
     this.updateDeltas_();
   };
 
+  Pivotr.prototype.decorateElem_ = function(topics, data) {
+    console.log('decorate elem', topics, data);
+  };
+
   Pivotr.prototype.updateDeltas_ = debounce(function() {
-    console.log('stopped scrolling for now');
-  }, 500);
-
-  Pivotr.prototype.subscribe = function(topic, func) {
-    if (!this.topics[topic]) {
-      this.topics[topic] = [];
-    }
-    var token = (++this.subUid).toString();
-    this.topics[topic].push({
-      token: token,
-      func: func
-    });
-    return token;
-  };
-
-  Pivotr.prototype.publish = function(topic, args) {
-    if (!this.topics[topic]) {
-      return false;
-    }
-    setTimeout(function() {
-      var subscribers = this.topics[topic],
-          len = subscribers ? subscribers.length : 0;
-
-      while (len--) {
-        subscribers[len].func(topic, args);
-      }
-    }, 0);
-    return true;
-  };
-
-  Pivotr.prototype.unsubscribe = function(token) {
-    for (var m in this.topics) {
-      if (this.topics[m]) {
-        for (var i = 0, j = this.topics[m].length; i < j; i++) {
-          if (this.topics[m][i].token === token) {
-            this.topics[m].splice(i, 1);
-            return token;
-          }
-        }
-      }
-    }
-    return false;
-  };
+    // Reset direction
+    console.log('reset');
+  }, 250);
 
   Pivotr.prototype.createUniqueId = function() {
     return '_' + Math.random().toString(36).substr(2, 9);
+  };
+
+  Pivotr.prototype.pubsub_ = function() {
+    var topics = {};
+    var hop = topics.hasOwnProperty;
+
+    return {
+      subscribe: function(topic, listener) {
+        // Create the topic's object if not yet created
+        if(!hop.call(topics, topic)) topics[topic] = [];
+
+        // Add the listener to queue
+        var index = topics[topic].push(listener) -1;
+
+        // Provide handle back for removal of topic
+        return {
+          remove: function() {
+            delete topics[topic][index];
+          }
+        };
+      },
+      publish: function(topic, info) {
+        console.log(topic);
+        // If the topic doesn't exist, or there's no listeners in queue, just leave
+        if(!hop.call(topics, topic)) return;
+
+        // Cycle through topics queue, fire!
+        topics[topic].forEach(function(item) {
+      		item(info !== undefined ? info : {});
+        });
+      }
+    };
   };
 
   doSomeBasicAnimations();
