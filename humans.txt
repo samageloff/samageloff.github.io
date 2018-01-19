@@ -2,10 +2,10 @@
 Your title: Sam Ageloff
 Site: samageloff.com
 Twitter: samageloff
-Location: Brooklyn, NY.
+Location: Royal Oak, MI.
 
 # SITE
-Last update: 2014/01/18
+Last update: 2018/01/17
 Standards: Yes
 Components: Jade, Meteocon, SASS, Fontastic, Github
 Software: Harp
